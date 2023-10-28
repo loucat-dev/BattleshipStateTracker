@@ -6,16 +6,11 @@ import net.luisa.battleship.domain.Ship;
 import net.luisa.battleship.domain.TargetSquare;
 import net.luisa.battleship.exception.ShipValidationException;
 
-import java.util.List;
 import java.util.Map;
 
 import static java.util.Collections.emptyMap;
 
 public class BattleshipService {
-
-    private final static List<Ship> ships = List.of(new Ship(5), new Ship(4), new Ship(3), new Ship(3), new Ship(2));
-
-    private List<Ship> shipsToPlaceOnBoard = ships;
 
     private BoardGame boardGame;
 
@@ -24,22 +19,25 @@ public class BattleshipService {
     }
 
     public Map<String, TargetSquare> addShipOnBoard(Ship ship, String position, Direction direction){
+        // check ship is available
         // check position is correct
         // check don't exceed board
         // check ship does not overlap
-        // check ship is available, using shipsToPlaceOnBoard
         // update targetSquare
 
-        if (isShipToAddValid(ship, position, direction)){
+        if (isShipPlacementValid(ship, position, direction)){
             return emptyMap();
         }
         return null;
     }
 
-    private boolean isShipToAddValid(Ship ship, String position, Direction direction){
+    private boolean isShipPlacementValid(Ship ship, String position, Direction direction){
         if (ship == null || position == null || position.isEmpty() || direction == null) {
             throw new ShipValidationException("ship, position and direction cannot be null or empty");
         }
+
+        boardGame.addShipOnBoard(ship); // TODO: ideally I would just calidate here and update the board later, otherwise I might need to revert.
+
         return true;
     }
 }

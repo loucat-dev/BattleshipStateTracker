@@ -1,4 +1,4 @@
 package net.luisa.battleship.domain;
 
-public record Ship(int shipLength) {
+public record Ship(String name, int shipLength) {
 }
