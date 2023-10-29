@@ -12,14 +12,13 @@ import static java.util.Collections.emptyMap;
 
 public class BattleshipService {
 
-    private BoardGame boardGame;
+    private final BoardGame boardGame;
 
     public BattleshipService(BoardGame boardGame) {
         this.boardGame = boardGame;
     }
 
     public Map<String, TargetSquare> addShipOnBoard(Ship ship, String position, Direction direction){
-        // check ship is available
         // check position is correct
         // check don't exceed board
         // check ship does not overlap
@@ -36,7 +35,7 @@ public class BattleshipService {
             throw new ShipValidationException("ship, position and direction cannot be null or empty");
         }
 
-        boardGame.addShipOnBoard(ship); // TODO: ideally I would just calidate here and update the board later, otherwise I might need to revert.
+        boardGame.canShipBeAdded(ship);
 
         return true;
     }

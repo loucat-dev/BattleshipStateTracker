@@ -7,24 +7,32 @@ import net.luisa.battleship.exception.ShipValidationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.stream.Stream;
 
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class BattleshipServiceTest {
 
     private static final String VALID_POSITION_1A = "1A";
     private static final Ship VALID_SHIP = new Ship("Carrier", 5);
 
+    @Mock
+    private BoardGame boardGameMock;
+
     private BattleshipService battleshipService;
 
     @BeforeEach
     void setUp() {
-        battleshipService = new BattleshipService(new BoardGame(Collections.emptyMap()));
+        battleshipService = new BattleshipService(boardGameMock);
     }
 
     private static Stream<Arguments> nullParameters() {
@@ -45,18 +53,13 @@ class BattleshipServiceTest {
     }
 
     @Test
-    void testAddShipToBoard_NotExistingShip_ThrowsValidationException(){
+    void testAddShipToBoard_InvalidShip_ThrowsValidationException(){
         Ship invalidShip = new Ship("Carrier", 4);
+
+        when(boardGameMock.canShipBeAdded(invalidShip)).thenThrow(ShipValidationException.class);
+
         Assertions.assertThrows(ShipValidationException.class, () -> {
             battleshipService.addShipOnBoard(invalidShip, VALID_POSITION_1A, Direction.HORIZONTAL);
-        });
-    }
-
-    @Test
-    void testAddShipToBoard_ShipAlreadyAdded_ThrowsValidationException(){
-        battleshipService.addShipOnBoard(VALID_SHIP, "1A", Direction.HORIZONTAL);
-        Assertions.assertThrows(ShipValidationException.class, () -> {
-            battleshipService.addShipOnBoard(VALID_SHIP, VALID_POSITION_1A, Direction.HORIZONTAL);
         });
     }
 }

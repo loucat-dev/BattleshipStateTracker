@@ -15,8 +15,8 @@ public class BoardGame {
 
     boolean hasLost;
 
-    public BoardGame(Map<String, TargetSquare> board) {
-        this.board = board;
+    public BoardGame() {
+        this.board = new HashMap<>();
         this.shipsOnBoard = new HashMap<>();
         this.score = 17;
         this.hasLost = false;
@@ -28,15 +28,31 @@ public class BoardGame {
         shipsOnBoard.put(new Ship("Destroyer", 2), false);
     }
 
+    public BoardGame(Map<Ship, Boolean> shipsOnBoard) {
+        this.board = new HashMap<>();
+        this.shipsOnBoard = shipsOnBoard;
+        this.score = 17;
+        this.hasLost = false;
+    }
 
-    public void addShipOnBoard(Ship ship){
+    public Map<Ship, Boolean> getShipsOnBoard() {
+        return shipsOnBoard;
+    }
+
+    public void addShipOnBoard(Ship ship) {
+        if (canShipBeAdded(ship)) {
+            shipsOnBoard.put(ship, true);
+        }
+    }
+
+    public boolean canShipBeAdded(Ship ship){
         if(shipsOnBoard.containsKey(ship)){
             if (shipsOnBoard.get(ship)){
                 throw new ShipValidationException(String.format("%s has already been placed on board", ship));
             }
-            shipsOnBoard.put(ship, true);
         } else {
             throw new ShipValidationException(String.format("%s is not available", ship));
         }
+        return true;
     }
 }
