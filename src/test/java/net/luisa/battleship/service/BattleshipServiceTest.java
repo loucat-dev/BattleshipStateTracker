@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -60,6 +61,16 @@ class BattleshipServiceTest {
 
         Assertions.assertThrows(ShipValidationException.class, () -> {
             battleshipService.addShipOnBoard(invalidShip, VALID_POSITION_1A, Direction.HORIZONTAL);
+        });
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"0A", "11A", "1K", "3l", "l5", "invalid"})
+    void testAddShipToBoard_InvalidPosition_ThrowsValidationException(String position){
+        when(boardGameMock.canShipBeAdded(VALID_SHIP)).thenReturn(true);
+
+        Assertions.assertThrows(ShipValidationException.class, () -> {
+            battleshipService.addShipOnBoard(VALID_SHIP, position, Direction.HORIZONTAL);
         });
     }
 }
