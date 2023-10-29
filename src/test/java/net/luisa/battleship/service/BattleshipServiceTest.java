@@ -96,13 +96,24 @@ class BattleshipServiceTest {
     }
 
     @Test
-    void testAddShipToBoard_PositionOccupied_ThrowsValidationException() {
+    void testAddShipToBoard_PositionOccupiedVertical_ThrowsValidationException() {
         when(boardGameMock.canShipBeAdded(VALID_SHIP)).thenReturn(true);
         Map<String, TargetSquare> board = Map.of("2a", new TargetSquare(true, false), "2b", new TargetSquare(true, false), "2c", new TargetSquare(true, false));
         when(boardGameMock.getBoard()).thenReturn(board);
 
         assertThrows(ShipValidationException.class, () -> {
-            battleshipService.addShipOnBoard(VALID_SHIP, "1a", Direction.HORIZONTAL);
+            battleshipService.addShipOnBoard(VALID_SHIP, "1a", Direction.VERTICAL);
+        });
+    }
+
+    @Test
+    void testAddShipToBoard_PositionOccupiedHorizontal_ThrowsValidationException() {
+        when(boardGameMock.canShipBeAdded(VALID_SHIP)).thenReturn(true);
+        Map<String, TargetSquare> board = Map.of("8j", new TargetSquare(true, false), "9j", new TargetSquare(true, false), "10j", new TargetSquare(true, false));
+        when(boardGameMock.getBoard()).thenReturn(board);
+
+        assertThrows(ShipValidationException.class, () -> {
+            battleshipService.addShipOnBoard(VALID_SHIP, "10f", Direction.HORIZONTAL);
         });
     }
 

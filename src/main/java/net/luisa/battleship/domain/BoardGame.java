@@ -67,10 +67,10 @@ public class BoardGame {
     public Map<String, TargetSquare> populateEmptyBoard(){
         Map<String, TargetSquare> board = new HashMap<>();
 
-        for(int position1 = 1; position1 <= BOARD_SIZE ; position1++) {
-            for(int position2 = LOWERCASE_A_ASCII_VALUE; position2 <= BOARD_SIZE - 1 + LOWERCASE_A_ASCII_VALUE; position2++) {
+        for (int position1 = 1; position1 <= BOARD_SIZE ; position1++) {
+            for (char position2 = 'a'; position2 <= 'j'; position2++) {
                 String numericalPosition = String.valueOf(position1);
-                String alphabeticalPosition = Character.toString((char) position2);
+                String alphabeticalPosition = Character.toString(position2);
                 board.put(numericalPosition +  alphabeticalPosition, new TargetSquare(false, false));
             }
         }

@@ -24,7 +24,6 @@ public class BattleshipService {
     }
 
     public Map<String, TargetSquare> addShipOnBoard(Ship ship, String position, Direction direction) {
-        // check ship does not overlap
         // update targetSquare
 
         if (isShipPlacementValid(ship, position, direction)) {
@@ -49,6 +48,7 @@ public class BattleshipService {
         }
 
         Map<String, TargetSquare> board = boardGame.getBoard();
+
         if (isPositionOccupied(ship, position, direction, board)){
             throw new ShipValidationException(String.format("ship %s in position %s overlaps with existing ships", ship, position));
         }
@@ -103,7 +103,29 @@ public class BattleshipService {
     }
 
     private boolean isPositionOccupied(Ship ship, String position, Direction direction, Map<String, TargetSquare> board){
-        throw new ShipValidationException("");
+        int numericPosition = getNumericPosition(position);
+        char alphabeticPosition = getAlphabeticPosition(position);
+
+        if (direction.equals(Direction.VERTICAL)){
+            int step = 0;
+            while(step < ship.shipLength()){
+                numericPosition += step;
+                if(board.containsKey(String.valueOf(numericPosition) +  alphabeticPosition) && board.get(String.valueOf(numericPosition) +  alphabeticPosition).withShip()){
+                    return true;
+                }
+                step++;
+            }
+        }
+
+        if (direction.equals(Direction.HORIZONTAL)){
+            while(alphabeticPosition <= 'j'){
+                if(board.containsKey(String.valueOf(numericPosition) +  alphabeticPosition) && board.get(String.valueOf(numericPosition) +  alphabeticPosition).withShip()){
+                    return true;
+                }
+                alphabeticPosition++;
+            }
+        }
+        return false;
     }
 
     private static char getAlphabeticPosition(String position) {
