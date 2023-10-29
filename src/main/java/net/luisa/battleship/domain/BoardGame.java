@@ -7,6 +7,9 @@ import java.util.Map;
 
 public class BoardGame {
 
+    public static final Integer BOARD_SIZE = 10;
+    public static final Integer MAX_SCORE = 17;
+
     private Map<String, TargetSquare> board;
 
     private Map<Ship, Boolean> shipsOnBoard;
@@ -18,7 +21,7 @@ public class BoardGame {
     public BoardGame() {
         this.board = new HashMap<>();
         this.shipsOnBoard = new HashMap<>();
-        this.score = 17;
+        this.score = MAX_SCORE;
         this.hasLost = false;
 
         shipsOnBoard.put(new Ship("Carrier", 5), false);
