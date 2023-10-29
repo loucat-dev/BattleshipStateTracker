@@ -1,5 +1,7 @@
 package net.luisa.battleship.domain;
 
+import java.util.Objects;
+
 public class TargetSquare {
 
     private boolean withShip;
@@ -24,5 +26,18 @@ public class TargetSquare {
 
     public void setHit(boolean hit) {
         this.hit = hit;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TargetSquare that = (TargetSquare) o;
+        return withShip == that.withShip && hit == that.hit;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(withShip, hit);
     }
 }

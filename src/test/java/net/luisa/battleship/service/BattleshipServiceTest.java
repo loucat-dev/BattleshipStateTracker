@@ -3,6 +3,7 @@ package net.luisa.battleship.service;
 import net.luisa.battleship.domain.BoardGame;
 import net.luisa.battleship.domain.Direction;
 import net.luisa.battleship.domain.Ship;
+import net.luisa.battleship.domain.TargetSquare;
 import net.luisa.battleship.exception.ShipValidationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -90,6 +92,17 @@ class BattleshipServiceTest {
 
         assertThrows(ShipValidationException.class, () -> {
             battleshipService.addShipOnBoard(ship, position, direction);
+        });
+    }
+
+    @Test
+    void testAddShipToBoard_PositionOccupied_ThrowsValidationException() {
+        when(boardGameMock.canShipBeAdded(VALID_SHIP)).thenReturn(true);
+        Map<String, TargetSquare> board = Map.of("2a", new TargetSquare(true, false), "2b", new TargetSquare(true, false), "2c", new TargetSquare(true, false));
+        when(boardGameMock.getBoard()).thenReturn(board);
+
+        assertThrows(ShipValidationException.class, () -> {
+            battleshipService.addShipOnBoard(VALID_SHIP, "1a", Direction.HORIZONTAL);
         });
     }
 

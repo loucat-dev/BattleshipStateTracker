@@ -48,6 +48,10 @@ public class BattleshipService {
             throw new ShipValidationException(String.format("ship %s in position %s exceeds board", ship, position));
         }
 
+        Map<String, TargetSquare> board = boardGame.getBoard();
+        if (isPositionOccupied(ship, position, direction, board)){
+            throw new ShipValidationException(String.format("ship %s in position %s overlaps with existing ships", ship, position));
+        }
 
         return true;
     }
@@ -77,14 +81,6 @@ public class BattleshipService {
         return true;
     }
 
-    private static char getAlphabeticPosition(String position) {
-        return position.substring(position.length() - 1).toLowerCase().charAt(0);
-    }
-
-    private static int getNumericPosition(String position) {
-        return Integer.parseInt(position.substring(0, position.length() - 1));
-    }
-
     private boolean isPlacementWithinBorders(Ship ship, String position, Direction direction) {
         int numericPosition = getNumericPosition(position);
         if (direction.equals(Direction.VERTICAL)){
@@ -103,7 +99,19 @@ public class BattleshipService {
                 return false;
             }
         }
-
         return true;
     }
+
+    private boolean isPositionOccupied(Ship ship, String position, Direction direction, Map<String, TargetSquare> board){
+        throw new ShipValidationException("");
+    }
+
+    private static char getAlphabeticPosition(String position) {
+        return position.substring(position.length() - 1).toLowerCase().charAt(0);
+    }
+
+    private static int getNumericPosition(String position) {
+        return Integer.parseInt(position.substring(0, position.length() - 1));
+    }
+
 }
