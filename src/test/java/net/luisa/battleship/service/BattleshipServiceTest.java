@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static net.luisa.battleship.shared.TestUtils.populateBoardWithPositions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -156,14 +157,6 @@ class BattleshipServiceTest {
         verify(boardGameMock, times(2)).canShipBeAdded(VALID_SHIP);
         verify(boardGameMock, times(2)).getBoard();
         verify(boardGameMock, times(2)).useShip(VALID_SHIP);
-    }
-
-    private Map<String, TargetSquare> populateBoardWithPositions(List<String> positions){
-        Map<String, TargetSquare> board = BoardUtils.populateEmptyBoard();
-
-        positions.forEach(position -> board.put(position, new TargetSquare(true, false)));
-
-        return board;
     }
 
 }

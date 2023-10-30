@@ -5,8 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import static net.luisa.battleship.shared.TestUtils.populateBoardWithPositions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -59,5 +61,15 @@ class BoardGameTest {
         assertThrows(ShipValidationException.class, () -> {
             boardGame.useShip(INVALID_SHIP);
         });
+    }
+
+    @Test
+    void testReceiveAttack_HorizontalSuccessfulAttack_ReturnsCorrectAttackResult(){ //TODO: also test miss, also test vertical
+        Map<String, TargetSquare> board = populateBoardWithPositions(List.of("10h","10i"));
+        boardGame = new BoardGame(board, null, 17, false);
+
+        AttackResult result = boardGame.receiveAttack(new ShipPlacement(VALID_SHIP, "10f", Direction.HORIZONTAL));
+        assertThat(result.hit()).isTrue();
+        assertThat(result.hitPositions()).contains("10h","10i"); //TODO: change to List so that we don't have null values
     }
 }

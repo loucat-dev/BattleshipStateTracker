@@ -11,17 +11,13 @@ import java.util.Map;
 
 import static net.luisa.battleship.domain.BoardGame.BOARD_SIZE;
 import static net.luisa.battleship.domain.BoardGame.SHIP_MAX_LENGTH;
+import static net.luisa.battleship.utils.BoardUtils.*;
 
 public class BattleshipService {
 
     private final BoardGame boardGame;
 
     private static final Logger log = LoggerFactory.getLogger(BattleshipService.class);
-
-    private static final Map<Character, Integer> lettersToNumbersMap = Map.of('a', 1, 'b', 2, 'c', 3, 'd', 4, 'e', 5,
-            'f', 6, 'g', 7, 'h', 8, 'i', 9, 'j', 10);
-
-    private static final char[] lettersOrderedList = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'};
 
     public BattleshipService(BoardGame boardGame) {
         this.boardGame = boardGame;
@@ -147,13 +143,4 @@ public class BattleshipService {
         }
         return false;
     }
-
-    private static char getAlphabeticPosition(String position) {
-        return position.substring(position.length() - 1).toLowerCase().charAt(0);
-    }
-
-    private static int getNumericPosition(String position) {
-        return Integer.parseInt(position.substring(0, position.length() - 1));
-    }
-
 }
