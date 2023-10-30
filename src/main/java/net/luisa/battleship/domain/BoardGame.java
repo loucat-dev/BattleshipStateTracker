@@ -9,7 +9,7 @@ public class BoardGame {
 
     public static final Integer BOARD_SIZE = 10;
     public static final Integer MAX_SCORE = 17;
-    public static final Integer LOWERCASE_A_ASCII_VALUE = 97;
+    public static final Integer SHIP_MAX_LENGTH = 5;
 
     private Map<String, TargetSquare> board;
 

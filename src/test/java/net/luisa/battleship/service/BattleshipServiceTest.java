@@ -1,9 +1,6 @@
 package net.luisa.battleship.service;
 
-import net.luisa.battleship.domain.BoardGame;
-import net.luisa.battleship.domain.Direction;
-import net.luisa.battleship.domain.Ship;
-import net.luisa.battleship.domain.TargetSquare;
+import net.luisa.battleship.domain.*;
 import net.luisa.battleship.exception.ShipValidationException;
 import net.luisa.battleship.utils.BoardUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,14 +13,14 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BattleshipServiceTest {
@@ -136,6 +133,37 @@ class BattleshipServiceTest {
                 entry("10j", new TargetSquare(true, false)));
 
         verify(boardGameMock).useShip(VALID_SHIP);
+    }
+
+    @Test
+    void testAddBattleshipOnBoard_ValidPlacementsList_ReturnsCorrectBoard(){
+        when(boardGameMock.canShipBeAdded(VALID_SHIP)).thenReturn(true);
+        Map<String, TargetSquare> tempBoard = populateBoardWithPositions(List.of("10f","10g","10h","10i","10j"));
+        when(boardGameMock.getBoard()).thenReturn(BoardUtils.populateEmptyBoard(), tempBoard);
+
+        List<ShipPlacement> shipPlacements = List.of(new ShipPlacement(VALID_SHIP, "10f", Direction.HORIZONTAL),
+                new ShipPlacement(VALID_SHIP, "1a", Direction.VERTICAL));
+
+        Map<String, TargetSquare> board = battleshipService.addBattleshipOnBoard(shipPlacements);
+
+        assertThat(board).contains(
+                entry("10f", new TargetSquare(true, false)),
+                entry("10g", new TargetSquare(true, false)),
+                entry("10h", new TargetSquare(true, false)),
+                entry("10i", new TargetSquare(true, false)),
+                entry("10j", new TargetSquare(true, false)));
+
+        verify(boardGameMock, times(2)).canShipBeAdded(VALID_SHIP);
+        verify(boardGameMock, times(2)).getBoard();
+        verify(boardGameMock, times(2)).useShip(VALID_SHIP);
+    }
+
+    private Map<String, TargetSquare> populateBoardWithPositions(List<String> positions){
+        Map<String, TargetSquare> board = BoardUtils.populateEmptyBoard();
+
+        positions.forEach(position -> board.put(position, new TargetSquare(true, false)));
+
+        return board;
     }
 
 }
