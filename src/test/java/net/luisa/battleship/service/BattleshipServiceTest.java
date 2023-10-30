@@ -5,6 +5,7 @@ import net.luisa.battleship.domain.Direction;
 import net.luisa.battleship.domain.Ship;
 import net.luisa.battleship.domain.TargetSquare;
 import net.luisa.battleship.exception.ShipValidationException;
+import net.luisa.battleship.utils.BoardUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +19,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -115,6 +119,23 @@ class BattleshipServiceTest {
         assertThrows(ShipValidationException.class, () -> {
             battleshipService.addShipOnBoard(VALID_SHIP, "10f", Direction.HORIZONTAL);
         });
+    }
+
+    @Test
+    void testAddShipToBoard_ValidPlacement_OccupyPositions(){
+        when(boardGameMock.canShipBeAdded(VALID_SHIP)).thenReturn(true);
+        when(boardGameMock.getBoard()).thenReturn(BoardUtils.populateEmptyBoard());
+
+        Map<String, TargetSquare> board = battleshipService.addShipOnBoard(VALID_SHIP, "10f", Direction.HORIZONTAL);
+
+        assertThat(board).contains(
+                entry("10f", new TargetSquare(true, false)),
+                entry("10g", new TargetSquare(true, false)),
+                entry("10h", new TargetSquare(true, false)),
+                entry("10i", new TargetSquare(true, false)),
+                entry("10j", new TargetSquare(true, false)));
+
+        verify(boardGameMock).useShip(VALID_SHIP);
     }
 
 }

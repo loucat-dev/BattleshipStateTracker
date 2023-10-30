@@ -8,9 +8,9 @@ import net.luisa.battleship.exception.ShipValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import static java.util.Collections.emptyMap;
 import static net.luisa.battleship.domain.BoardGame.BOARD_SIZE;
 
 public class BattleshipService {
@@ -19,20 +19,33 @@ public class BattleshipService {
 
     private static final Logger log = LoggerFactory.getLogger(BattleshipService.class);
 
+    private static final Map<Character, Integer> lettersToNumbersMap =  Map.of('a', 1, 'b', 2, 'c', 3, 'd', 4, 'e', 5,
+            'f', 6, 'g', 7, 'h', 8, 'i', 9, 'j', 10);
+
+    private static final char[] lettersOrderedList = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'};
+
     public BattleshipService(BoardGame boardGame) {
         this.boardGame = boardGame;
     }
 
     public Map<String, TargetSquare> addShipOnBoard(Ship ship, String position, Direction direction) {
-        // update targetSquare
 
-        if (isShipPlacementValid(ship, position, direction)) {
-            return emptyMap();
+        String[] positionsToOccupy = new String[ship.shipLength()];
+        Map<String, TargetSquare> board = new HashMap<>();
+
+        if (isShipPlacementValid(ship, position, direction, positionsToOccupy)) {
+            boardGame.useShip(ship);
+
+            board = boardGame.getBoard();
+
+            for(String positionToOccupy: positionsToOccupy){
+                board.put(positionToOccupy, new TargetSquare(true, false));
+            }
         }
-        return null;
+        return board;
     }
 
-    private boolean isShipPlacementValid(Ship ship, String position, Direction direction) {
+    private boolean isShipPlacementValid(Ship ship, String position, Direction direction, String[] positionsToOccupy) {
         if (ship == null || position == null || position.isEmpty() || direction == null) {
             throw new ShipValidationException("ship, position and direction cannot be null or empty");
         }
@@ -49,7 +62,7 @@ public class BattleshipService {
 
         Map<String, TargetSquare> board = boardGame.getBoard();
 
-        if (isPositionOccupied(ship, position, direction, board)){
+        if (isPositionOccupied(ship, position, direction, board, positionsToOccupy)){
             throw new ShipValidationException(String.format("ship %s in position %s overlaps with existing ships", ship, position));
         }
 
@@ -91,10 +104,9 @@ public class BattleshipService {
         }
 
         char alphabeticPosition = getAlphabeticPosition(position);
-        Map<Character, Integer> alphabeticPositionsMap =  Map.of('a', 1, 'b', 2, 'c', 3, 'd', 4, 'e', 5,
-                'f', 6, 'g', 7, 'h', 8, 'i', 9, 'j', 10);
+
         if (direction.equals(Direction.HORIZONTAL)){
-            if (alphabeticPositionsMap.get(alphabeticPosition) + ship.shipLength() - 1 > BOARD_SIZE) {
+            if (lettersToNumbersMap.get(alphabeticPosition) + ship.shipLength() - 1 > BOARD_SIZE) {
                 log.error("{} in position {} exceeds board", ship, position);
                 return false;
             }
@@ -102,7 +114,7 @@ public class BattleshipService {
         return true;
     }
 
-    private boolean isPositionOccupied(Ship ship, String position, Direction direction, Map<String, TargetSquare> board){
+    private boolean isPositionOccupied(Ship ship, String position, Direction direction, Map<String, TargetSquare> board, String[] positionsToOccupy){
         int numericPosition = getNumericPosition(position);
         char alphabeticPosition = getAlphabeticPosition(position);
 
@@ -113,16 +125,22 @@ public class BattleshipService {
                 if(board.containsKey(String.valueOf(numericPosition) +  alphabeticPosition) && board.get(String.valueOf(numericPosition) +  alphabeticPosition).withShip()){
                     return true;
                 }
+                positionsToOccupy[step] = String.valueOf(numericPosition) +  alphabeticPosition;
                 step++;
             }
         }
 
         if (direction.equals(Direction.HORIZONTAL)){
-            while(alphabeticPosition <= 'j'){
+            int step = 0;
+            int endLetterNum = lettersToNumbersMap.get(alphabeticPosition) + ship.shipLength() - 1;
+            char lastLetter = lettersOrderedList[endLetterNum - 1];
+            while(alphabeticPosition <= lastLetter){
                 if(board.containsKey(String.valueOf(numericPosition) +  alphabeticPosition) && board.get(String.valueOf(numericPosition) +  alphabeticPosition).withShip()){
                     return true;
                 }
+                positionsToOccupy[step] = String.valueOf(numericPosition) +  alphabeticPosition;
                 alphabeticPosition++;
+                step++;
             }
         }
         return false;

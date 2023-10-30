@@ -47,7 +47,7 @@ public class BoardGame {
         return board;
     }
 
-    public void addShipOnBoard(Ship ship) {
+    public void useShip(Ship ship) {
         if (canShipBeAdded(ship)) {
             shipsOnBoard.put(ship, true);
         }
@@ -64,17 +64,5 @@ public class BoardGame {
         return true;
     }
 
-    public Map<String, TargetSquare> populateEmptyBoard(){
-        Map<String, TargetSquare> board = new HashMap<>();
 
-        for (int position1 = 1; position1 <= BOARD_SIZE ; position1++) {
-            for (char position2 = 'a'; position2 <= 'j'; position2++) {
-                String numericalPosition = String.valueOf(position1);
-                String alphabeticalPosition = Character.toString(position2);
-                board.put(numericalPosition +  alphabeticalPosition, new TargetSquare(false, false));
-            }
-        }
-
-        return board;
-    }
 }
