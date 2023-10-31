@@ -38,6 +38,10 @@ public class BattleshipService {
     }
 
     public Map<String, TargetSquare> addBattleshipOnBoard(List<ShipPlacement> shipPlacements) {
+
+        if(boardGame.hasLost()){
+            throw new IllegalStateException("This game is already over");
+        }
         return shipPlacements.stream()
                 .map(shipPlacement -> addShipOnBoard(shipPlacement.ship(), shipPlacement.position(), shipPlacement.direction()))
                 .reduce((first, second) -> second)

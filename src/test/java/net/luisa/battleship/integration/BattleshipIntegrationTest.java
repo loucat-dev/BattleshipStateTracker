@@ -11,7 +11,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BattleshipIntegrationTest {
 
-
     private BattleshipService battleshipService;
     private BoardGame boardGame;
 
@@ -64,9 +63,5 @@ public class BattleshipIntegrationTest {
         // send last attack and check hasLost is true
         assertThat(boardGame.receiveAttack("10h")).isEqualTo(new AttackResult(true, 0));
         assertThat(boardGame.hasLost()).isTrue();
-
-
-    }//TODO: what happens to the score if I hit the boat twice?
-
-    //TODO: shall I stop the game if the game is over?
+    }
 }

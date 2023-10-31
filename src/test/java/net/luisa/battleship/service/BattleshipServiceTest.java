@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static java.util.Collections.emptyList;
 import static net.luisa.battleship.TestUtils.populateBoardWithPositions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
@@ -157,6 +158,15 @@ class BattleshipServiceTest {
         verify(boardGameMock, times(2)).canShipBeAdded(VALID_SHIP);
         verify(boardGameMock, times(2)).getBoard();
         verify(boardGameMock, times(2)).useShip(VALID_SHIP);
+    }
+
+    @Test
+    void testAddBattleshipOnBoard_GivenThePlayerHasLost_ReturnsGameOverWithException(){
+        when(boardGameMock.hasLost()).thenReturn(true);
+
+        assertThrows(IllegalStateException.class, () ->{
+            battleshipService.addBattleshipOnBoard(emptyList());
+        });
     }
 
 }
