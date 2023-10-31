@@ -157,5 +157,4 @@ class BattleshipServiceTest {
             battleshipService.addBattleshipOnBoard(emptyList());
         });
     }
-
 }

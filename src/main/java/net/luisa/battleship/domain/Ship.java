@@ -1,7 +1,6 @@
 package net.luisa.battleship.domain;
 
 public enum Ship {
-
     CARRIER(5),
     BATTLESHIP(4),
     CRUISER(3),

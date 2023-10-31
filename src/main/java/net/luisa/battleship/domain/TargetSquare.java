@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class TargetSquare {
 
-    private boolean withShip;
-    private boolean hit;
+    private final boolean withShip;
+    private final boolean hit;
 
     public TargetSquare(boolean withShip, boolean hit) {
         this.withShip = withShip;
@@ -16,16 +16,8 @@ public class TargetSquare {
         return withShip;
     }
 
-    public void setWithShip(boolean withShip) {
-        this.withShip = withShip;
-    }
-
     public boolean isHit() {
         return hit;
-    }
-
-    public void setHit(boolean hit) {
-        this.hit = hit;
     }
 
     @Override

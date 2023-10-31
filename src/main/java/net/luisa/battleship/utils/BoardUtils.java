@@ -38,5 +38,4 @@ public class BoardUtils {
     public static int getNumericPosition(String position) {
         return Integer.parseInt(position.substring(0, position.length() - 1)); //TODO: to test
     }
-
 }
