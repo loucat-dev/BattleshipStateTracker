@@ -15,8 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BoardGameTest {
 
-    private static final Ship VALID_SHIP = new Ship("Carrier", 5);
-    private static final Ship INVALID_SHIP = new Ship("InvalidShip", 5);
+    private static final Ship VALID_SHIP = Ship.CARRIER;
 
     private BoardGame boardGame;
 
@@ -28,13 +27,6 @@ class BoardGameTest {
     @Test
     void testCanShipBeAdded_ValidShip_ReturnsTrue() {
         assertTrue(boardGame.canShipBeAdded(VALID_SHIP));
-    }
-
-    @Test
-    void testCanShipBeAdded_InvalidShip_ThrowsException() {
-        assertThrows(ShipValidationException.class, () -> {
-            boardGame.canShipBeAdded(INVALID_SHIP);
-        });
     }
 
     @Test
@@ -54,13 +46,6 @@ class BoardGameTest {
         boardGame.useShip(VALID_SHIP);
 
         assertThat(boardGame.getShipsOnBoard().get(VALID_SHIP)).isTrue();
-    }
-
-    @Test
-    void testAddShipOnBoard_InvalidShip_ThrowsException() {
-        assertThrows(ShipValidationException.class, () -> {
-            boardGame.useShip(INVALID_SHIP);
-        });
     }
 
     @Test

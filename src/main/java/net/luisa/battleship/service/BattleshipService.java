@@ -98,7 +98,7 @@ public class BattleshipService {
     private boolean isPlacementWithinBorders(Ship ship, String position, Direction direction) {
         int numericPosition = getNumericPosition(position);
         if (direction.equals(Direction.VERTICAL)) {
-            if (numericPosition + ship.shipLength() - 1 > BOARD_SIZE) {
+            if (numericPosition + ship.getShipLength() - 1 > BOARD_SIZE) {
                 log.error("{} in position {} exceeds board", ship, position);
                 return false;
             }
@@ -107,7 +107,7 @@ public class BattleshipService {
         char alphabeticPosition = getAlphabeticPosition(position);
 
         if (direction.equals(Direction.HORIZONTAL)) {
-            if (lettersToNumbersMap.get(alphabeticPosition) + ship.shipLength() - 1 > BOARD_SIZE) {
+            if (lettersToNumbersMap.get(alphabeticPosition) + ship.getShipLength() - 1 > BOARD_SIZE) {
                 log.error("{} in position {} exceeds board", ship, position);
                 return false;
             }
@@ -121,7 +121,7 @@ public class BattleshipService {
 
         if (direction.equals(Direction.VERTICAL)) {
             int step = 0;
-            while (step < ship.shipLength()) {
+            while (step < ship.getShipLength()) {
                 if (board.containsKey(String.valueOf(numericPosition) + alphabeticPosition) && board.get(String.valueOf(numericPosition) + alphabeticPosition).withShip()) {
                     return true;
                 }
@@ -133,7 +133,7 @@ public class BattleshipService {
 
         if (direction.equals(Direction.HORIZONTAL)) {
             int step = 0;
-            int endLetterNum = lettersToNumbersMap.get(alphabeticPosition) + ship.shipLength() - 1;
+            int endLetterNum = lettersToNumbersMap.get(alphabeticPosition) + ship.getShipLength() - 1;
             char lastLetter = lettersOrderedList[endLetterNum - 1];
             while (alphabeticPosition <= lastLetter) {
                 if (board.containsKey(String.valueOf(numericPosition) + alphabeticPosition) && board.get(String.valueOf(numericPosition) + alphabeticPosition).withShip()) {

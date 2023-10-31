@@ -5,9 +5,6 @@ import net.luisa.battleship.exception.ShipValidationException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.luisa.battleship.utils.BoardUtils.lettersOrderedList;
-import static net.luisa.battleship.utils.BoardUtils.lettersToNumbersMap;
-
 public class BoardGame {
 
     public static final Integer BOARD_SIZE = 10;
@@ -27,12 +24,6 @@ public class BoardGame {
         this.shipsOnBoard = new HashMap<>();
         this.score = MAX_SCORE;
         this.hasLost = false;
-
-        shipsOnBoard.put(new Ship("Carrier", 5), false);
-        shipsOnBoard.put(new Ship("Battleship", 4), false);
-        shipsOnBoard.put(new Ship("Cruiser", 3), false);
-        shipsOnBoard.put(new Ship("Submarine", 3), false);
-        shipsOnBoard.put(new Ship("Destroyer", 2), false);
     }
 
     public BoardGame(Map<Ship, Boolean> shipsOnBoard) {
@@ -75,12 +66,8 @@ public class BoardGame {
     }
 
     public boolean canShipBeAdded(Ship ship) {
-        if (shipsOnBoard.containsKey(ship)) {
-            if (shipsOnBoard.get(ship)) {
+        if (shipsOnBoard.containsKey(ship) && shipsOnBoard.get(ship)) {
                 throw new ShipValidationException(String.format("%s has already been placed on board", ship));
-            }
-        } else {
-            throw new ShipValidationException(String.format("%s is not available", ship));
         }
         return true;
     }

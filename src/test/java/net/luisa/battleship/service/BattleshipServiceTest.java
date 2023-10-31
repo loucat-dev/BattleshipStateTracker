@@ -28,8 +28,8 @@ import static org.mockito.Mockito.*;
 class BattleshipServiceTest {
 
     private static final String VALID_POSITION_1A = "1A";
-    private static final Ship VALID_SHIP = new Ship("Carrier", 5);
-    private static final Ship VALID_SHIP_SMALL = new Ship("Destroyer", 2);
+    private static final Ship VALID_SHIP = Ship.CARRIER;
+    private static final Ship VALID_SHIP_SMALL = Ship.DESTROYER;
 
     @Mock
     private BoardGame boardGameMock;
@@ -55,17 +55,6 @@ class BattleshipServiceTest {
     void testAddShipToBoard_NullParameters_ThrowsValidationException(Ship ship, String position, Direction direction) {
         assertThrows(ShipValidationException.class, () -> {
             battleshipService.addShipOnBoard(ship, position, direction);
-        });
-    }
-
-    @Test
-    void testAddShipToBoard_InvalidShip_ThrowsValidationException() {
-        Ship invalidShip = new Ship("Carrier", 4);
-
-        when(boardGameMock.canShipBeAdded(invalidShip)).thenThrow(ShipValidationException.class);
-
-        assertThrows(ShipValidationException.class, () -> {
-            battleshipService.addShipOnBoard(invalidShip, VALID_POSITION_1A, Direction.HORIZONTAL);
         });
     }
 

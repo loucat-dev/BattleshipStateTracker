@@ -24,13 +24,11 @@ public class BattleshipIntegrationTest {
     void testEnd2endBattle(){
 
         List<ShipPlacement> shipPlacements = List.of(
-                new ShipPlacement(new Ship("Carrier", 5), "2b", Direction.HORIZONTAL),
-                new ShipPlacement(new Ship("Battleship", 4), "2a", Direction.VERTICAL),
-                new ShipPlacement(new Ship("Cruiser", 3), "10f", Direction.HORIZONTAL),
-                new ShipPlacement(new Ship("Submarine", 3), "5b", Direction.VERTICAL),
-                new ShipPlacement(new Ship("Destroyer", 2), "4h", Direction.HORIZONTAL));
-//TODO: I think the ships should be enum
-
+                new ShipPlacement(Ship.CARRIER, "2b", Direction.HORIZONTAL),
+                new ShipPlacement(Ship.BATTLESHIP, "2a", Direction.VERTICAL),
+                new ShipPlacement(Ship.CRUISER, "10f", Direction.HORIZONTAL),
+                new ShipPlacement(Ship.SUBMARINE, "5b", Direction.VERTICAL),
+                new ShipPlacement(Ship.DESTROYER, "4h", Direction.HORIZONTAL));
 
         // position the ships to the board
         battleshipService.addBattleshipOnBoard(shipPlacements);
