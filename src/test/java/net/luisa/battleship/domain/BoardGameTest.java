@@ -81,4 +81,16 @@ class BoardGameTest {
         AttackResult result = boardGame.receiveAttack("5h");
         assertThat(result).isEqualTo(new AttackResult(false, 17));
     }
+
+    @Test
+    void testReceiveAttack_DoubleAttack_ReturnsSameScore(){
+        Map<String, TargetSquare> board = populateBoardWithPositions(List.of("10h","10i"));
+        boardGame = new BoardGame(board, null, 17, false);
+
+        AttackResult result = boardGame.receiveAttack("10h");
+        assertThat(result).isEqualTo(new AttackResult(true, 16));
+
+        AttackResult result2 = boardGame.receiveAttack("10h");
+        assertThat(result2).isEqualTo(new AttackResult(false, 16));
+    }
 }

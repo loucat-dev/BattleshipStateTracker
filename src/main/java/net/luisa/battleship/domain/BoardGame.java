@@ -87,7 +87,7 @@ public class BoardGame {
 
     public AttackResult receiveAttack(String position) {
         boolean isAttackSuccessful = false;
-        if (board.containsKey(position) && board.get(position).withShip()) {
+        if (board.containsKey(position) && board.get(position).withShip() && !board.get(position).isHit()) {
             board.put(position, new TargetSquare(true, true));
             isAttackSuccessful = true;
             decreaseScore();
