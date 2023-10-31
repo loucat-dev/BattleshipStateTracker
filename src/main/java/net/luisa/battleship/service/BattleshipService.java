@@ -5,7 +5,6 @@ import net.luisa.battleship.exception.ShipValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -119,11 +118,11 @@ public class BattleshipService {
         if (direction.equals(Direction.VERTICAL)) {
             int step = 0;
             while (step < ship.shipLength()) {
-                numericPosition += step;
                 if (board.containsKey(String.valueOf(numericPosition) + alphabeticPosition) && board.get(String.valueOf(numericPosition) + alphabeticPosition).withShip()) {
                     return true;
                 }
                 positionsToOccupy[step] = String.valueOf(numericPosition) + alphabeticPosition;
+                numericPosition++;
                 step++;
             }
         }

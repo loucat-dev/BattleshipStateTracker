@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static net.luisa.battleship.shared.TestUtils.populateBoardWithPositions;
+import static net.luisa.battleship.TestUtils.populateBoardWithPositions;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -64,12 +64,21 @@ class BoardGameTest {
     }
 
     @Test
-    void testReceiveAttack_HorizontalSuccessfulAttack_ReturnsCorrectAttackResult(){ //TODO: also test miss, also test vertical
+    void testReceiveAttack_SuccessfulAttack_ReturnsCorrectAttackResult(){
         Map<String, TargetSquare> board = populateBoardWithPositions(List.of("10h","10i"));
         boardGame = new BoardGame(board, null, 17, false);
 
-        AttackResult result = boardGame.receiveAttack(new ShipPlacement(VALID_SHIP, "10f", Direction.HORIZONTAL));
-        assertThat(result.hit()).isTrue();
-        assertThat(result.hitPositions()).contains("10h","10i"); //TODO: change to List so that we don't have null values
+        AttackResult result = boardGame.receiveAttack( "10i");
+
+        assertThat(result).isEqualTo(new AttackResult(true, 16));
+    }
+
+    @Test
+    void testReceiveAttack_MissedAttack_ReturnsCorrectAttackResult(){
+        Map<String, TargetSquare> board = populateBoardWithPositions(List.of("10h","10i"));
+        boardGame = new BoardGame(board, null, 17, false);
+
+        AttackResult result = boardGame.receiveAttack("5h");
+        assertThat(result).isEqualTo(new AttackResult(false, 17));
     }
 }

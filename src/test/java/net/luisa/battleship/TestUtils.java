@@ -1,4 +1,4 @@
-package net.luisa.battleship.shared;
+package net.luisa.battleship;
 
 import net.luisa.battleship.domain.TargetSquare;
 import net.luisa.battleship.utils.BoardUtils;

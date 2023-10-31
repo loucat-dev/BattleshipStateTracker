@@ -5,8 +5,8 @@ import net.luisa.battleship.exception.ShipValidationException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.luisa.battleship.service.BattleshipService.*;
-import static net.luisa.battleship.utils.BoardUtils.*;
+import static net.luisa.battleship.utils.BoardUtils.lettersOrderedList;
+import static net.luisa.battleship.utils.BoardUtils.lettersToNumbersMap;
 
 public class BoardGame {
 
@@ -57,8 +57,12 @@ public class BoardGame {
         return board;
     }
 
-    private void decreaseScore() { //TODO: to test somehow
-        this.score --;
+    public boolean hasLost() {
+        return hasLost;
+    }
+
+    private void decreaseScore() {
+        this.score--;
         if (score <= 0) {
             this.hasLost = true;
         }
@@ -70,9 +74,9 @@ public class BoardGame {
         }
     }
 
-    public boolean canShipBeAdded(Ship ship){
-        if(shipsOnBoard.containsKey(ship)){
-            if (shipsOnBoard.get(ship)){
+    public boolean canShipBeAdded(Ship ship) {
+        if (shipsOnBoard.containsKey(ship)) {
+            if (shipsOnBoard.get(ship)) {
                 throw new ShipValidationException(String.format("%s has already been placed on board", ship));
             }
         } else {
@@ -81,45 +85,13 @@ public class BoardGame {
         return true;
     }
 
-    public AttackResult receiveAttack(ShipPlacement shipAttack){
-        int numericPosition = getNumericPosition(shipAttack.position());
-        char alphabeticPosition = getAlphabeticPosition(shipAttack.position());
+    public AttackResult receiveAttack(String position) {
         boolean isAttackSuccessful = false;
-        String[] hitPositions= new String[shipAttack.ship().shipLength()];
-
-        if (shipAttack.direction().equals(Direction.VERTICAL)) {
-            int step = 0;
-            while (step < shipAttack.ship().shipLength()) {
-                numericPosition += step;
-                if (board.containsKey(String.valueOf(numericPosition) + alphabeticPosition) && board.get(String.valueOf(numericPosition) + alphabeticPosition).withShip()) {
-                    isAttackSuccessful = scoreAttack(numericPosition, alphabeticPosition);
-                    hitPositions[step] = String.valueOf(numericPosition) + alphabeticPosition;
-                }
-                step++;
-            }
+        if (board.containsKey(position) && board.get(position).withShip()) {
+            board.put(position, new TargetSquare(true, true));
+            isAttackSuccessful = true;
+            decreaseScore();
         }
-
-        if (shipAttack.direction().equals(Direction.HORIZONTAL)) {
-            int endLetterNum = lettersToNumbersMap.get(alphabeticPosition) + shipAttack.ship().shipLength() - 1;
-            char lastLetter = lettersOrderedList[endLetterNum - 1];
-            int step = 0;
-            while (alphabeticPosition <= lastLetter) {
-                if (board.containsKey(String.valueOf(numericPosition) + alphabeticPosition) && board.get(String.valueOf(numericPosition) + alphabeticPosition).withShip()) {
-                    isAttackSuccessful = scoreAttack(numericPosition, alphabeticPosition);
-                    hitPositions[step] = String.valueOf(numericPosition) + alphabeticPosition;
-                }
-                alphabeticPosition++;
-                step++;
-            }
-        }
-        return new AttackResult(isAttackSuccessful, hitPositions);
+        return new AttackResult(isAttackSuccessful, score);
     }
-
-    private boolean scoreAttack(int numericPosition, char alphabeticPosition) {
-        board.put(String.valueOf(numericPosition) + alphabeticPosition, new TargetSquare(true, true));
-        decreaseScore();
-        return true;
-    }
-
-//TODO: add end to end test
 }
